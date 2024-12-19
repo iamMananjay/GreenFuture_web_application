@@ -27,7 +27,7 @@ public class JWTUtils {
 
     public String generateToken(UserDetails userDetails){
         return Jwts.builder()
-                .subject(userDetails.getUsername())
+                .claim("email", userDetails.getUsername())  // Store the name (or email) as a custom claim
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(Key)
@@ -43,6 +43,9 @@ public class JWTUtils {
                 .compact();
     }
 
+    public String extractEmail(String token) {
+        return extractClaims(token, claims -> claims.get("email", String.class));  // Extract 'email' claim
+    }
     public  String extractUsername(String token){
         return  extractClaims(token, Claims::getSubject);
     }
@@ -52,7 +55,7 @@ public class JWTUtils {
     }
 
     public  boolean isTokenValid(String token, UserDetails userDetails){
-        final String username = extractUsername(token);
+        final String username = extractEmail(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 

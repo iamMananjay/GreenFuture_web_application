@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Data
-public class Users implements UserDetails {
+public  class Users implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +25,7 @@ public class Users implements UserDetails {
     private String gender;
     private String status;
     private String userRole;
+
 
     public Integer getId() {
         return id;
@@ -53,6 +54,10 @@ public class Users implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public String getUsername() {
+        return email;
     }
 
     public void setPassword(String password) {
@@ -106,10 +111,10 @@ public class Users implements UserDetails {
         return List.of(new SimpleGrantedAuthority(userRole));
     }
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
+//    @Override
+//    public String getUsername() {
+//        return email;
+//    }
 
     @Override
     public boolean isAccountNonExpired() {

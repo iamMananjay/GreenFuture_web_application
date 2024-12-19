@@ -2,6 +2,7 @@ package com.example.greenfuture.controller;
 
 
 import com.example.greenfuture.model.Users;
+import com.example.greenfuture.repository.UsersRepository;
 import com.example.greenfuture.service.ResourceNotFoundException;
 import com.example.greenfuture.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,11 @@ public class UsersController {
 
     @Autowired
     private UserService userService;
+
+    private UsersRepository usersRepository;
+
+
+
 
     @GetMapping
     public List<Users> getAllUsers() {
@@ -44,10 +50,12 @@ public class UsersController {
         }
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+
 }
 

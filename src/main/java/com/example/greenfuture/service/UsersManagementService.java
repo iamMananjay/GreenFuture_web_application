@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsersManagementService {
@@ -90,6 +92,46 @@ public class UsersManagementService {
             response.setMessage("An unexpected error occurred: " + e.getMessage());
         }
         return response;
+    }
+    public ReqRes getAllUsers() {
+        ReqRes reqRes = new ReqRes();
+
+        try {
+            List<Users> result = usersRepo.findAll();
+            if (!result.isEmpty()) {
+                reqRes.setOurUsersList(result);
+                reqRes.setStatusCode(200);
+                reqRes.setMessage("Successful");
+            } else {
+                reqRes.setStatusCode(404);
+                reqRes.setMessage("No users found");
+            }
+            return reqRes;
+        } catch (Exception e) {
+            reqRes.setStatusCode(500);
+            reqRes.setMessage("Error occurred: " + e.getMessage());
+            return reqRes;
+        }
+    }
+    public ReqRes getMyInfo(String email){
+        ReqRes reqRes = new ReqRes();
+        try {
+            Optional<Users> userOptional = usersRepo.findByEmail(email);
+            if (userOptional.isPresent()) {
+                reqRes.setUsers(userOptional.get());
+                reqRes.setStatusCode(200);
+                reqRes.setMessage("successful");
+            } else {
+                reqRes.setStatusCode(404);
+                reqRes.setMessage("User not found for update");
+            }
+
+        }catch (Exception e){
+            reqRes.setStatusCode(500);
+            reqRes.setMessage("Error occurred while getting user info: " + e.getMessage());
+        }
+        return reqRes;
+
     }
 
 }

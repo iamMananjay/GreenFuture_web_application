@@ -25,6 +25,10 @@ public class UserService {
         return usersRepository.findById(id);
     }
 
+    // Method to get user by username
+//    public Optional<Users> getUserByUsername(String username) {
+//        return usersRepository.findByUsername(username);  // Assuming findByUsername is defined in the repository
+//    }
 
     public UserService(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
