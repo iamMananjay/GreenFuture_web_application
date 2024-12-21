@@ -60,5 +60,4 @@ public class Team {
     @JoinColumn(name = "idea_id")
     private Idea idea; // Foreign key to Idea
 
-    // Constructors, Getters, and Setters
 }

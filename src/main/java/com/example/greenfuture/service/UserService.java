@@ -25,10 +25,7 @@ public class UserService {
         return usersRepository.findById(id);
     }
 
-    // Method to get user by username
-//    public Optional<Users> getUserByUsername(String username) {
-//        return usersRepository.findByUsername(username);  // Assuming findByUsername is defined in the repository
-//    }
+
 
     public UserService(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
@@ -46,7 +43,6 @@ public class UserService {
                     user.setName(userDetails.getName());
                     user.setEmail(userDetails.getEmail());
                     user.setContact(userDetails.getContact());
-                    user.setRegion(userDetails.getRegion());
                     user.setGender(userDetails.getGender());
                     user.setStatus(userDetails.getStatus());
                     user.setUserRole(userDetails.getUserRole());

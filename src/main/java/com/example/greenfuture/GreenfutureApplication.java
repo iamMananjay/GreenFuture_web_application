@@ -28,7 +28,7 @@ public class GreenfutureApplication {
 //				user.setEmail("Mananjaysth111@gmail.com");
 //				user.setPassword(passwordEncoder.encode("admin123"));
 //				user.setContact("9860252886");
-//				user.setRegion("Asia");
+////				user.setRegion("Asia");
 //				user.setStatus("active");
 //				user.setGender("Male");
 //				user.setUserRole("admin");

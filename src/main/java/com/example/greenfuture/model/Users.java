@@ -21,10 +21,11 @@ public  class Users implements UserDetails {
     private String name;
     private String password;
     private String contact;
-    private String region;
+//    private String region;
     private String gender;
     private String status;
     private String userRole;
+
 
 
     public Integer getId() {
@@ -72,13 +73,6 @@ public  class Users implements UserDetails {
         this.contact = contact;
     }
 
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
 
     public String getGender() {
         return gender;
