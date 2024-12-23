@@ -32,7 +32,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(request-> request.requestMatchers("/auth/**","/api/**","/api/regions/","/api/regions/**", "/public/**").permitAll()
+                .authorizeHttpRequests(request-> request.requestMatchers("/auth/**","/api/**","/api/regions/","/api/regions/**","/api/projects/","/api/projects/**", "/public/**").permitAll()
                         .requestMatchers("/api/ideas").permitAll() // Add this for POST request handling under /api/**
                         .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
                         .requestMatchers("/user/**").hasAnyAuthority("USER")
