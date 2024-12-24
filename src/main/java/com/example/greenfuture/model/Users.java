@@ -21,12 +21,20 @@ public  class Users implements UserDetails {
     private String name;
     private String password;
     private String contact;
-//    private String region;
     private String gender;
     private String status;
     private String userRole;
+    @ManyToOne(optional = true) // Allows null values for designation
+    @JoinColumn(name = "designation_id", referencedColumnName = "id", nullable = true)
+    private JobDesignation designation;
 
+    public JobDesignation getDesignation() {
+        return designation;
+    }
 
+    public void setDesignation(JobDesignation designation) {
+        this.designation = designation;
+    }
 
     public Integer getId() {
         return id;
@@ -105,10 +113,6 @@ public  class Users implements UserDetails {
         return List.of(new SimpleGrantedAuthority(userRole));
     }
 
-//    @Override
-//    public String getUsername() {
-//        return email;
-//    }
 
     @Override
     public boolean isAccountNonExpired() {

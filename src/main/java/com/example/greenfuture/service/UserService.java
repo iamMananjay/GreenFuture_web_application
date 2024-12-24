@@ -1,7 +1,9 @@
 package com.example.greenfuture.service;
 
 
+import com.example.greenfuture.model.JobDesignation;
 import com.example.greenfuture.model.Users;
+import com.example.greenfuture.repository.JobDesignationRepository;
 import com.example.greenfuture.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +17,8 @@ public class UserService {
 
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private JobDesignationRepository jobDesignationRepository;
     private final PasswordEncoder passwordEncoder;
 
     public List<Users> getAllUsers() {
@@ -46,7 +50,15 @@ public class UserService {
                     user.setGender(userDetails.getGender());
                     user.setStatus(userDetails.getStatus());
                     user.setUserRole(userDetails.getUserRole());
-                    // Update other fields as necessary
+
+                    // Fetch the JobDesignation entity if provided in the userDetails
+                    if (userDetails.getDesignation() != null && userDetails.getDesignation().getId() != null) {
+                        JobDesignation jobDesignation = jobDesignationRepository.findById(userDetails.getDesignation().getId())
+                                .orElseThrow(() -> new ResourceNotFoundException("JobDesignation not found with id " + userDetails.getDesignation().getId()));
+                        user.setDesignation(jobDesignation); // Set the fetched JobDesignation
+                    }
+
+                    // Save the updated user entity
                     return usersRepository.save(user);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
