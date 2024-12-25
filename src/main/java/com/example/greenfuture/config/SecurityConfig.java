@@ -32,7 +32,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(request-> request.requestMatchers("/auth/**","/api/**","/api/regions/","/api/regions/**","/api/projects/","/api/projects/**","/api/incentives/","/api/incentives/**","/api/job-designations/","/api/job-designations/**", "/public/**").permitAll()
+                .authorizeHttpRequests(request-> request.requestMatchers("/auth/**","/api/**","/api/regions/","/api/regions/**",
+                                "/api/projects/","/api/projects/**","/api/incentives/","/api/incentives/**","/api/job-designations/",
+                                "/api/job-designations/**",  "/public/**").permitAll()
+                        .requestMatchers("/api/ideas/{id}/vote","/api/ideas/{id}/unvote","/api/ideas/{id}/vote/check").authenticated() // Require authentication for voting
                         .requestMatchers("/api/ideas").permitAll() // Add this for POST request handling under /api/**
                         .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
                         .requestMatchers("/user/**").hasAnyAuthority("USER")

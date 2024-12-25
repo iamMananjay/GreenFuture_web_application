@@ -43,5 +43,27 @@ public class IdeaController {
         ideaService.deleteIdea(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/api/ideas/{id}/vote")
+    public ResponseEntity<Void> voteForIdea(@PathVariable Long id, @RequestParam String userEmail) {
+        ideaService.voteForIdea(id, userEmail);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/api/ideas/{id}/unvote")
+    public ResponseEntity<Void> unvoteIdea(@PathVariable Long id, @RequestParam String userEmail) {
+        ideaService.unvoteIdea(id, userEmail);
+        return ResponseEntity.ok().build();
+    }
+    // Check if a user has voted on a specific idea
+    @GetMapping("/api/ideas/{id}/vote/check")
+    public ResponseEntity<Boolean> checkUserVote(
+            @PathVariable Long id,
+            @RequestParam String userEmail) {
+        boolean hasVoted = ideaService.hasUserVoted(id, userEmail);
+        return ResponseEntity.ok(hasVoted);
+    }
+
+
 }
 

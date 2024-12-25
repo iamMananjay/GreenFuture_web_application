@@ -1,10 +1,13 @@
 package com.example.greenfuture.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "idea")
@@ -19,9 +22,21 @@ public class Idea {
     private int voteCount;
     private String submittedBy;
     private LocalDateTime submissionDate;
+    @OneToMany(mappedBy = "idea", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference  // This will handle the serialization of the votes without causing infinite recursion
+    private List<Vote> votes = new ArrayList<>();
+
 
     public Long getId() {
         return id;
+    }
+
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
     }
 
     public void setId(Long id) {
@@ -75,6 +90,7 @@ public class Idea {
     public void setSubmissionDate(LocalDateTime submissionDate) {
         this.submissionDate = submissionDate;
     }
+
 }
 
 
