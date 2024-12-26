@@ -1,6 +1,5 @@
 package com.example.greenfuture.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -21,22 +20,26 @@ public class Idea {
     private String status; // e.g., "OPEN", "CLOSED", "UNDER_REVIEW"
     private int voteCount;
     private String submittedBy;
-    private LocalDateTime submissionDate;
+
+    // One-to-Many relationship for votes
     @OneToMany(mappedBy = "idea", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference  // This will handle the serialization of the votes without causing infinite recursion
+    @JsonManagedReference // Handle serialization of votes
     private List<Vote> votes = new ArrayList<>();
 
+    // One-to-Many relationship for comments
+    @OneToMany(mappedBy = "idea", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference // Handle serialization of comments
+    private List<Comment> comments = new ArrayList<>();
 
+    // File attachment support
+    @ElementCollection
+    @CollectionTable(name = "idea_files", joinColumns = @JoinColumn(name = "idea_id"))
+    @Column(name = "file_path")
+    private List<String> attachedFiles = new ArrayList<>();
+
+    // Getters and setters
     public Long getId() {
         return id;
-    }
-
-    public List<Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(List<Vote> votes) {
-        this.votes = votes;
     }
 
     public void setId(Long id) {
@@ -83,14 +86,29 @@ public class Idea {
         this.submittedBy = submittedBy;
     }
 
-    public LocalDateTime getSubmissionDate() {
-        return submissionDate;
+
+
+    public List<Vote> getVotes() {
+        return votes;
     }
 
-    public void setSubmissionDate(LocalDateTime submissionDate) {
-        this.submissionDate = submissionDate;
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<String> getAttachedFiles() {
+        return attachedFiles;
+    }
+
+    public void setAttachedFiles(List<String> attachedFiles) {
+        this.attachedFiles = attachedFiles;
+    }
 }
-
-

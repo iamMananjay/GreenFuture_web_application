@@ -29,24 +29,30 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(request-> request.requestMatchers("/auth/**","/api/**","/api/regions/","/api/regions/**",
-                                "/api/projects/","/api/projects/**","/api/incentives/","/api/incentives/**","/api/job-designations/",
-                                "/api/job-designations/**",  "/public/**").permitAll()
-                        .requestMatchers("/api/ideas/{id}/vote","/api/ideas/{id}/unvote","/api/ideas/{id}/vote/check").authenticated() // Require authentication for voting
-                        .requestMatchers("/api/ideas").permitAll() // Add this for POST request handling under /api/**
-                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
-                        .requestMatchers("/user/**").hasAnyAuthority("USER")
-                        .requestMatchers("/adminuser/**").hasAnyAuthority("ADMIN", "USER")
-                        .anyRequest().authenticated())
-                .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(request -> request.requestMatchers("/auth/**", "/api/**", "/api/regions/", "/api/regions/**",
+                                "/api/projects/", "/api/projects/**", "/api/incentives/", "/api/incentives/**", "/api/job-designations/",
+                                "/api/job-designations/**", "/public/**").permitAll()
+                        .requestMatchers("/api/ideas/{id}/vote", "/api/ideas/{id}/unvote", "/api/ideas/{id}/vote/check").authenticated() // Require authentication for voting
+                        .requestMatchers("/api/ideas", "/api/ideas/{id}/attachments/**").permitAll()
+                        .requestMatchers("/api/ideas").permitAll() // Allow creation of ideas (POST request under /api/ideas)
+                        .requestMatchers("/api/ideas/{ideaId}/files/{fileName}").authenticated() // Require authentication to add comments
+                        .requestMatchers("/api/ideas/{id}/comments").authenticated() // Require authentication to add comments
+                        .requestMatchers("/api/ideas/{id}/comments/**").authenticated() // Allow access to comment actions (view or delete)
+                        .requestMatchers("/api/ideas/{id}/attachments/**").authenticated()// Require authentication for downloading attachments
+                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN") // Admin access
+                        .requestMatchers("/user/**").hasAnyAuthority("USER") // User access
+                        .requestMatchers("/adminuser/**").hasAnyAuthority("ADMIN", "USER") // Both ADMIN and USER
+                        .anyRequest().authenticated()) // Default for other requests
+                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
                         jwtAuthFilter, UsernamePasswordAuthenticationFilter.class
                 );
         return httpSecurity.build();
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -64,5 +70,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
         return authenticationConfiguration.getAuthenticationManager();
     }
+
 
 }
